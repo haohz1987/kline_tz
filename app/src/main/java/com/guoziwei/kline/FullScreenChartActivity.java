@@ -24,10 +24,10 @@ public class FullScreenChartActivity extends AppCompatActivity {
         final ViewPager viewPager = findViewById(R.id.view_pager);
         KLineChartFragment dayKFragment = KLineChartFragment.newInstance(1);
         KLineChartFragment weekKFragment = KLineChartFragment.newInstance(7);
-        Fragment[] fragments = {TimeLineChartFragment.newInstance(1), FiveDayChartFragment.newInstance(),
-                dayKFragment, weekKFragment,
-                KLineChartFragment.newInstance(30)};
-        String[] titles = {"分时图", "5Day", "日K", "周K", "月"};
+        Fragment[] fragments = {TimeLineChartFragment.newInstance(1),
+                KLineChartFragment.newInstance(1), KLineChartFragment.newInstance(7),
+                KLineChartFragment.newInstance(30), KLineChartFragment.newInstance(90), KLineChartFragment.newInstance(365),};
+        String[] titles = {"分时图","日K", "周K", "月","季度","年"};
         viewPager.setOffscreenPageLimit(fragments.length);
         viewPager.setAdapter(new SimpleFragmentPagerAdapter(getSupportFragmentManager(), fragments, titles));
         tabLayout.setupWithViewPager(viewPager);

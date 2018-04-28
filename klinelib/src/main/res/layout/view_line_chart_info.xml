@@ -11,11 +11,11 @@
         android:id="@+id/tv_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:gravity="left"
         android:textColor="@color/white"
         android:textSize="12sp"
         android:padding="4dp"
-        tools:text="2017/10/11(UTC)"/>
+        tools:text="12:10"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
         android:orientation="horizontal">
         <TextView
             android:layout_width="60dp"
-            android:text="开盘价:"
+            android:text="当前值:"
             android:textSize="12sp"
             android:textColor="@color/white"
             android:layout_height="wrap_content"/>
@@ -42,7 +42,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:text="$883.12"
-            android:gravity="center"
+            android:gravity="right"
             android:textSize="12sp"
             android:textColor="@color/white"
             android:layout_height="wrap_content"/>
@@ -54,7 +54,7 @@
         android:orientation="horizontal">
         <TextView
             android:layout_width="60dp"
-            android:text="@string/change_rate"
+            android:text="涨跌幅:"
             android:textSize="12sp"
             android:textColor="@color/white"
             android:layout_height="wrap_content"/>
@@ -62,8 +62,8 @@
             android:id="@+id/tv_change_rate"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:text="@string/price"
-            android:gravity="center"
+            android:text="$0.00"
+            android:gravity="right"
             android:textSize="12sp"
             android:textColor="@color/white"
             android:layout_height="wrap_content"/>
@@ -83,8 +83,8 @@
             android:id="@+id/tv_vol"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:text="@string/price"
-            android:gravity="center"
+            android:text="0"
+            android:gravity="right"
             android:textSize="12sp"
             android:textColor="@color/white"
             android:layout_height="wrap_content"/>

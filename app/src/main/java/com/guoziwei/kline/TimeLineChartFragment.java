@@ -13,8 +13,6 @@ import com.guoziwei.klinelib.chart.TimeLineView;
 import com.guoziwei.klinelib.model.HisData;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * 分时页面
@@ -48,7 +46,7 @@ public class TimeLineChartFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mTimeLineView = new TimeLineView(getContext());
         mTimeLineView.setDateFormat("HH:mm");
-        int count = 241;
+        int count = 120;
         mTimeLineView.setCount(count, count, count);
         initData();
         return mTimeLineView;

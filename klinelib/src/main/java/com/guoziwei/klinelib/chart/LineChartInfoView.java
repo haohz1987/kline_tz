@@ -1,5 +1,6 @@
 package com.guoziwei.klinelib.chart;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 
 import com.guoziwei.klinelib.R;
 import com.guoziwei.klinelib.model.HisData;
+import com.guoziwei.klinelib.util.DataUtils;
 import com.guoziwei.klinelib.util.DateUtils;
 import com.guoziwei.klinelib.util.DoubleUtil;
 
@@ -42,10 +44,11 @@ public class LineChartInfoView extends ChartInfoView {
         mTvVol = (TextView) findViewById(R.id.tv_vol);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void setData(double lastClose, HisData data) {
-        mTvTime.setText(DateUtils.formatTime(data.getDate()));
-        mTvPrice.setText(DoubleUtil.formatDecimal(data.getClose()));
+        mTvTime.setText("时间:"+DateUtils.formatTime(data.getDate()));
+        mTvPrice.setText("$"+DataUtils.fmtMicrometer(DoubleUtil.formatDecimal(data.getClose())));
 //        mTvChangeRate.setText(String.format(Locale.getDefault(), "%.2f%%", (data.getClose()- data.getOpen()) / data.getOpen() * 100));
         mTvChangeRate.setText(String.format(Locale.getDefault(), "%.2f%%", (data.getClose() - lastClose) / lastClose * 100));
         mTvVol.setText(data.getVol() + "");

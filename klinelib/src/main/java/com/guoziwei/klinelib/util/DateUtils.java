@@ -2,7 +2,6 @@ package com.guoziwei.klinelib.util;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 
 public class DateUtils {
@@ -15,7 +14,7 @@ public class DateUtils {
 
 
     public static String formatDate(long time) {
-        DateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        DateFormat dateFormat2 = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
         String formatDate = dateFormat2.format(time);
         return formatDate;
     }

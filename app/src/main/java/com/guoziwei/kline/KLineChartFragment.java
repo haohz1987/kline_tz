@@ -8,8 +8,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import com.guoziwei.klinelib.chart.KLineView;
 import com.guoziwei.klinelib.model.HisData;
@@ -46,22 +44,24 @@ public class KLineChartFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_kline_chart, container, false);
         mKLineView = v.findViewById(R.id.kline);
-        RadioGroup rgIndex = v.findViewById(R.id.rg_index);
-        mKLineView.setDateFormat("yyyy-MM-dd");
-        rgIndex.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == R.id.cb_vol) {
-                    showVolume();
-                } else if (checkedId == R.id.cb_macd) {
-                    showMacd();
-                } else if (checkedId == R.id.cb_kdj) {
-                    showKdj();
-                }
-            }
-        });
+        // TODO: 2018/4/28 选择技术指标 
+//        RadioGroup rgIndex = v.findViewById(R.id.rg_index);
+//        mKLineView.setDateFormat("yyyy-MM-dd");
+//        rgIndex.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(RadioGroup group, int checkedId) {
+//                if (checkedId == R.id.cb_vol) {
+//                    showVolume();
+//                } else if (checkedId == R.id.cb_macd) {
+//                    showMacd();
+//                } else if (checkedId == R.id.cb_kdj) {
+//                    showKdj();
+//                }
+//            }
+//        });
+        showVolume();
         initData();
-        ((RadioButton) rgIndex.getChildAt(0)).setChecked(true);
+//        ((RadioButton) rgIndex.getChildAt(0)).setChecked(true);
         return v;
     }
 
