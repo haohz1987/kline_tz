@@ -16,7 +16,7 @@ public class LogT {
      */
     private static boolean isShowLog = true;
 
-    private static final String DOUBLE_DIVIDER = "--------------";
+    private static final String DOUBLE_DIVIDER = "--->";
 
     public static void init(boolean isShowLog) {
         LogT.isShowLog = isShowLog;
@@ -105,7 +105,7 @@ public class LogT {
             builder.append(msg);
         }
         if (tr != null) {
-            builder.append('\n').append(Log.getStackTraceString(tr));
+            builder.append(Log.getStackTraceString(tr));//append('\n').
         }
 //        builder.append('\n');
         switch (type) {
@@ -154,7 +154,7 @@ public class LogT {
                 continue;
             }
             return "  " + ste.getFileName().substring(0, ste.getFileName().indexOf(".")) + "." + ste.getMethodName()
-                    + " (" + ste.getFileName() + ":" + ste.getLineNumber() + ")\n";
+                    + " (" + ste.getFileName() + ":" + ste.getLineNumber() + ")";
         }
         return "";
 

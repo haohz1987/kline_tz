@@ -6,4 +6,6 @@
 
     <color name="main_text_color">#ffffff</color>
     <color name="chart_background">#ffffff</color>
+    <!-- 灰色  主要字体颜色  -->
+    <color name="grey_color">#777777</color>
 </resources>

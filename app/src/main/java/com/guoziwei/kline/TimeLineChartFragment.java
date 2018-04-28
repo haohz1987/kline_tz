@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.guoziwei.klinelib.LogT;
 import com.guoziwei.klinelib.chart.TimeLineView;
 import com.guoziwei.klinelib.model.HisData;
 
@@ -53,44 +54,12 @@ public class TimeLineChartFragment extends Fragment {
     }
 
     protected void initData() {
+
         final List<HisData> hisData = Util.get1Day(getContext());
-        mTimeLineView.setLastClose(hisData.get(0).getClose());
+        mTimeLineView.setLastClose(hisData.get(0).getClose());//设置最后一点显示
+        LogT.w("最后一点位置:"+hisData.get(0).getClose());
         mTimeLineView.initData(hisData);
 
-        /*new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                mTimeLineView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        int index = (int) (Math.random() * 100);
-                        HisData data = hisData.get(index);
-                        HisData lastData = hisData.get(hisData.size() - 1);
-                        HisData newData = new HisData();
-                        newData.setVol(data.getVol());
-                        newData.setClose(data.getClose());
-                        newData.setHigh(Math.max(data.getHigh(), lastData.getClose()));
-                        newData.setLow(Math.min(data.getLow(), lastData.getClose()));
-                        newData.setOpen(lastData.getClose());
-                        newData.setDate(System.currentTimeMillis());
-                        hisData.add(newData);
-                        mTimeLineView.addData(newData);
-                    }
-                });
-            }
-        }, 1000, 500);*/
-
-       /* new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                mTimeLineView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mTimeLineView.refreshData((float) (hisData.get(0).getClose() + 10 * Math.random()));
-                    }
-                });
-            }
-        }, 1000, 1000);*/
     }
 
 }

@@ -53,7 +53,10 @@ public class LineChartInfoView extends ChartInfoView {
         mTvChangeRate.setText(String.format(Locale.getDefault(), "%.2f%%", (data.getClose() - lastClose) / lastClose * 100));
         mTvVol.setText(data.getVol() + "");
         removeCallbacks(mRunnable);
-        postDelayed(mRunnable, 2000);
+        postDelayed(mRunnable,2000);
+        // TODO: 2018/4/28 修改是否延时隐藏
+//        post(mRunnable);
+
     }
 
 }

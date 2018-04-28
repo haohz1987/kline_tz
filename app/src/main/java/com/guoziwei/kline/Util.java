@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.guoziwei.kline.model.KModel;
 import com.guoziwei.kline.model.LineModel;
+import com.guoziwei.klinelib.LogT;
 import com.guoziwei.klinelib.model.HisData;
 
 import java.io.BufferedReader;
@@ -96,6 +97,7 @@ public class Util {
             data.setVol(m.getVolume());
             data.setOpen(i == 0 ? 0 : list.get(i - 1).getPrice());
             try {
+                LogT.w("time="+m.getTime()+",parseTime="+sFormat1.parse(m.getTime()).getTime());
                 data.setDate(sFormat1.parse(m.getTime()).getTime());
             } catch (ParseException e) {
                 e.printStackTrace();

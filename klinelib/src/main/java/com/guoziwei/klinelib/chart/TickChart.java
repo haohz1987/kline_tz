@@ -23,6 +23,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.guoziwei.klinelib.LogT;
 import com.guoziwei.klinelib.R;
 import com.guoziwei.klinelib.model.HisData;
 import com.guoziwei.klinelib.util.DataUtils;
@@ -53,7 +54,8 @@ public class TickChart extends RelativeLayout {
     private Context mContext;
     private int mLineColor = getResources().getColor(R.color.normal_line_color);
     private int transparentColor = getResources().getColor(android.R.color.transparent);
-    private int candleGridColor = getResources().getColor(R.color.chart_grid_color);
+//    private int candleGridColor = getResources().getColor(R.color.chart_grid_color);
+    private int candleGridColor = getResources().getColor(android.R.color.holo_red_dark);
     private int mTextColor = getResources().getColor(R.color.axis_color);
 
     private float mLastPrice;
@@ -302,15 +304,18 @@ public class TickChart extends RelativeLayout {
         mChart.setOnChartGestureListener(new OnChartGestureListener() {
             @Override
             public void onChartGestureStart(MotionEvent event, ChartTouchListener.ChartGesture lastPerformedGesture) {
+                LogT.w("onChartGestureStart_event="+event.toString()+",lastPerformedGesture="+lastPerformedGesture.name());
             }
 
             @Override
             public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+                LogT.w("onChartGestureEnd_me="+me.toString()+",lastPerformedGesture="+lastPerformedGesture.name());
                 mChart.setDragEnabled(true);
             }
 
             @Override
             public void onChartLongPressed(MotionEvent me) {
+                LogT.w("onChartLongPressed_me="+me.toString());
 //                mChart.setDragEnabled(false);
             }
 

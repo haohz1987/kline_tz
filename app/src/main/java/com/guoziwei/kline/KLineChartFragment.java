@@ -75,65 +75,13 @@ public class KLineChartFragment extends Fragment {
         });
     }
 
-    public void showMacd() {
-        mKLineView.post(new Runnable() {
-            @Override
-            public void run() {
-                mKLineView.showMacd();
-            }
-        });
-    }
 
-    public void showKdj() {
-        mKLineView.post(new Runnable() {
-            @Override
-            public void run() {
-                mKLineView.showKdj();
-            }
-        });
-    }
 
     protected void initData() {
         final List<HisData> hisData = Util.getK(getContext(), mDay);
         mKLineView.initData(hisData);
         mKLineView.setLimitLine();
 
-       /* new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                mKLineView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        int index = (int) (Math.random() * hisData.size());
-                        HisData data = hisData.get(index);
-                        HisData lastData = hisData.get(hisData.size() - 1);
-                        HisData newData = new HisData();
-                        newData.setVol(data.getVol());
-                        newData.setClose(data.getClose());
-                        newData.setHigh(Math.max(data.getHigh(), lastData.getClose()));
-                        newData.setLow(Math.min(data.getLow(), lastData.getClose()));
-                        newData.setOpen(lastData.getClose());
-                        newData.setDate(System.currentTimeMillis());
-                        hisData.add(newData);
-                        mKLineView.addData(newData);
-                    }
-                });
-            }
-        }, 1000, 1000);
-
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                mKLineView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        int index = (int) (Math.random() * (hisData.size()));
-                        HisData data = hisData.get(index);
-                        mKLineView.refreshData((float) data.getClose());
-                    }
-                });
-            }
-        }, 500, 1000);*/
     }
 
 }

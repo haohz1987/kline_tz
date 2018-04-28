@@ -6,35 +6,8 @@
     <com.guoziwei.klinelib.chart.KLineView
         android:id="@+id/kline"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_toLeftOf="@+id/rg_index" />
+        android:layout_height="match_parent"/>
 
-    <RadioGroup
-        android:id="@+id/rg_index"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:visibility="gone"
-        android:orientation="vertical">
 
-        <RadioButton
-            android:id="@+id/cb_vol"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="成交量" />
-
-        <RadioButton
-            android:id="@+id/cb_macd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="MACD" />
-
-        <RadioButton
-            android:id="@+id/cb_kdj"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="KDJ" />
-    </RadioGroup>
 
 </RelativeLayout>

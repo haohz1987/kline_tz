@@ -1,5 +1,6 @@
 package com.guoziwei.klinelib.chart;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -30,6 +31,7 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ICandleDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.Transformer;
+import com.guoziwei.klinelib.LogT;
 import com.guoziwei.klinelib.R;
 import com.guoziwei.klinelib.model.HisData;
 import com.guoziwei.klinelib.util.DataUtils;
@@ -63,18 +65,8 @@ public class KLineView extends BaseView implements CoupleChartGestureListener.On
     public static final int MA20 = 20;
     public static final int MA30 = 30;
 
-    public static final int K = 31;
-    public static final int D = 32;
-    public static final int J = 33;
-
-    public static final int DIF = 34;
-    public static final int DEA = 35;
-
-
     protected AppCombinedChart mChartPrice;
     protected AppCombinedChart mChartVolume;
-    protected AppCombinedChart mChartMacd;
-    protected AppCombinedChart mChartKdj;
 
     protected ChartInfoView mChartInfoView;
     protected Context mContext;
@@ -108,38 +100,19 @@ public class KLineView extends BaseView implements CoupleChartGestureListener.On
         LayoutInflater.from(context).inflate(R.layout.view_kline, this);
         mChartPrice = (AppCombinedChart) findViewById(R.id.price_chart);
         mChartVolume = (AppCombinedChart) findViewById(R.id.vol_chart);
-        mChartMacd = (AppCombinedChart) findViewById(R.id.macd_chart);
-        mChartKdj = (AppCombinedChart) findViewById(R.id.kdj_chart);
+
         mChartInfoView = (ChartInfoView) findViewById(R.id.k_info);
-        mChartInfoView.setChart(mChartPrice, mChartVolume, mChartMacd, mChartKdj);
 
         mChartPrice.setNoDataText(context.getString(R.string.loading));
         initChartPrice();
         initBottomChart(mChartVolume);
-        initBottomChart(mChartMacd);
-        initBottomChart(mChartKdj);
         setOffset();
         initChartListener();
     }
-
-    public void showKdj() {
-        mChartVolume.setVisibility(GONE);
-        mChartMacd.setVisibility(GONE);
-        mChartKdj.setVisibility(VISIBLE);
-    }
-
-    public void showMacd() {
-        mChartVolume.setVisibility(GONE);
-        mChartMacd.setVisibility(VISIBLE);
-        mChartKdj.setVisibility(GONE);
-    }
-
     public void showVolume() {
-        mChartMacd.setVisibility(GONE);
-        mChartKdj.setVisibility(GONE);
+
         mChartVolume.setVisibility(VISIBLE);
     }
-
 
     protected void initChartPrice() {
         mChartPrice.setScaleEnabled(true);
@@ -149,25 +122,31 @@ public class KLineView extends BaseView implements CoupleChartGestureListener.On
         mChartPrice.setScaleYEnabled(false);
         mChartPrice.setAutoScaleMinMaxEnabled(true);
         mChartPrice.setDragDecelerationEnabled(false);
+        //用于图表拓展显示时间
         LineChartXMarkerView mvx = new LineChartXMarkerView(mContext, mData);
         mvx.setChartView(mChartPrice);
         mChartPrice.setXMarker(mvx);
+
         Legend lineChartLegend = mChartPrice.getLegend();
         lineChartLegend.setEnabled(false);
 
         XAxis xAxisPrice = mChartPrice.getXAxis();
-        xAxisPrice.setDrawLabels(false);
-        xAxisPrice.setDrawAxisLine(false);
-        xAxisPrice.setDrawGridLines(false);
+        //上下引线
+        xAxisPrice.setDrawLabels(true);
+        xAxisPrice.setDrawAxisLine(true);
+        //在图像X方向显示密集网格线
+        xAxisPrice.setDrawGridLines(true);
         xAxisPrice.setAxisMinimum(-0.5f);
 
 
         YAxis axisLeftPrice = mChartPrice.getAxisLeft();
         axisLeftPrice.setLabelCount(5, true);
         axisLeftPrice.setDrawLabels(true);
-        axisLeftPrice.setDrawGridLines(false);
+        //在图像X方向显示密集网格线
+        axisLeftPrice.setDrawGridLines(true);
 
-        axisLeftPrice.setDrawAxisLine(false);
+        axisLeftPrice.setDrawAxisLine(true);
+        //左侧提示价格的位置，outside不显示
         axisLeftPrice.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
         axisLeftPrice.setTextColor(mAxisColor);
         axisLeftPrice.setValueFormatter(new IAxisValueFormatter() {
@@ -185,16 +164,14 @@ public class KLineView extends BaseView implements CoupleChartGestureListener.On
         leftColorContentYAxisRenderer.setUseDefaultLabelXOffset(false);
         mChartPrice.setRendererLeftYAxis(leftColorContentYAxisRenderer);
 
-
+        //始终未显示数量提示,??
         YAxis axisRightPrice = mChartPrice.getAxisRight();
-        axisRightPrice.setLabelCount(5, true);
+        axisRightPrice.setLabelCount(3, true);
         axisRightPrice.setDrawLabels(true);
-
-        axisRightPrice.setDrawGridLines(false);
+        axisRightPrice.setDrawGridLines(true);
         axisRightPrice.setDrawAxisLine(false);
         axisRightPrice.setTextColor(mAxisColor);
         axisRightPrice.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
-
         axisRightPrice.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
@@ -222,9 +199,10 @@ public class KLineView extends BaseView implements CoupleChartGestureListener.On
     }
 
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initChartListener() {
-        mChartPrice.setOnChartGestureListener(new CoupleChartGestureListener(this, mChartPrice, mChartVolume, mChartMacd, mChartKdj));
-        mChartPrice.setOnChartValueSelectedListener(new InfoViewListener(mContext, mLastClose, mData, mChartInfoView, mChartVolume, mChartMacd, mChartKdj));
+        mChartPrice.setOnChartGestureListener(new CoupleChartGestureListener(this, mChartPrice, mChartVolume));
+        mChartPrice.setOnChartValueSelectedListener(new InfoViewListener(mContext, mLastClose, mData, mChartInfoView, mChartVolume));
         mChartPrice.setOnTouchListener(new ChartInfoViewHandler(mChartPrice));
     }
 
@@ -283,28 +261,17 @@ public class KLineView extends BaseView implements CoupleChartGestureListener.On
         mChartPrice.notifyDataSetChanged();
         moveToLast(mChartPrice);
         initChartVolumeData();
-        initChartMacdData();
-        initChartKdjData();
 
         mChartPrice.getXAxis().setAxisMaximum(combinedData.getXMax() + 0.5f);
         mChartVolume.getXAxis().setAxisMaximum(mChartVolume.getData().getXMax() + 0.5f);
-        mChartMacd.getXAxis().setAxisMaximum(mChartMacd.getData().getXMax() + 0.5f);
-        mChartKdj.getXAxis().setAxisMaximum(mChartKdj.getData().getXMax() + 0.5f);
 
         mChartPrice.zoom(MAX_COUNT * 1f / INIT_COUNT, 0, 0, 0);
         mChartVolume.zoom(MAX_COUNT * 1f / INIT_COUNT, 0, 0, 0);
-        mChartMacd.zoom(MAX_COUNT * 1f / INIT_COUNT, 0, 0, 0);
-        mChartKdj.zoom(MAX_COUNT * 1f / INIT_COUNT, 0, 0, 0);
 
         HisData hisData = getLastData();
         setDescription(mChartVolume, "成交量 " + hisData.getVol());
         setDescription(mChartPrice, String.format(Locale.getDefault(), "MA5:%.2f  MA10:%.2f  MA20:%.2f  MA30:%.2f",
                 hisData.getMa5(), hisData.getMa10(), hisData.getMa20(), hisData.getMa30()));
-        setDescription(mChartMacd, String.format(Locale.getDefault(), "MACD:%.2f  DEA:%.2f  DIF:%.2f",
-                hisData.getMacd(), hisData.getDea(), hisData.getDif()));
-        setDescription(mChartKdj, String.format(Locale.getDefault(), "K:%.2f  D:%.2f  J:%.2f",
-                hisData.getK(), hisData.getD(), hisData.getJ()));
-
 
     }
 
@@ -328,25 +295,6 @@ public class KLineView extends BaseView implements CoupleChartGestureListener.On
         if (type == NORMAL_LINE) {
             lineDataSetMa.setColor(getResources().getColor(R.color.normal_line_color));
             lineDataSetMa.setCircleColor(ContextCompat.getColor(mContext, R.color.normal_line_color));
-        } else if (type == K) {
-            lineDataSetMa.setColor(getResources().getColor(R.color.k));
-            lineDataSetMa.setCircleColor(mTransparentColor);
-        } else if (type == D) {
-            lineDataSetMa.setColor(getResources().getColor(R.color.d));
-            lineDataSetMa.setCircleColor(mTransparentColor);
-            lineDataSetMa.setHighlightEnabled(false);
-        } else if (type == J) {
-            lineDataSetMa.setColor(getResources().getColor(R.color.j));
-            lineDataSetMa.setCircleColor(mTransparentColor);
-            lineDataSetMa.setHighlightEnabled(false);
-        } else if (type == DIF) {
-            lineDataSetMa.setColor(getResources().getColor(R.color.dif));
-            lineDataSetMa.setCircleColor(mTransparentColor);
-            lineDataSetMa.setHighlightEnabled(false);
-        } else if (type == DEA) {
-            lineDataSetMa.setColor(getResources().getColor(R.color.dea));
-            lineDataSetMa.setCircleColor(mTransparentColor);
-            lineDataSetMa.setHighlightEnabled(false);
         } else if (type == AVE_LINE) {
             lineDataSetMa.setColor(getResources().getColor(R.color.ave_color));
             lineDataSetMa.setCircleColor(mTransparentColor);
@@ -422,79 +370,11 @@ public class KLineView extends BaseView implements CoupleChartGestureListener.On
         CombinedData combinedData = new CombinedData();
         combinedData.setData(barData);
         mChartVolume.setData(combinedData);
-
         mChartVolume.setVisibleXRange(MAX_COUNT, MIN_COUNT);
-
         mChartVolume.notifyDataSetChanged();
 //        mChartVolume.moveViewToX(combinedData.getEntryCount());
         moveToLast(mChartVolume);
 
-    }
-
-    private void initChartMacdData() {
-        ArrayList<BarEntry> barEntries = new ArrayList<>();
-        ArrayList<BarEntry> paddingEntries = new ArrayList<>();
-        ArrayList<Entry> difEntries = new ArrayList<>();
-        ArrayList<Entry> deaEntries = new ArrayList<>();
-        for (int i = 0; i < mData.size(); i++) {
-            HisData t = mData.get(i);
-            barEntries.add(new BarEntry(i, (float) t.getMacd()));
-            difEntries.add(new Entry(i, (float) t.getDif()));
-            deaEntries.add(new Entry(i, (float) t.getDea()));
-        }
-        int maxCount = MAX_COUNT;
-        if (!mData.isEmpty() && mData.size() < maxCount) {
-            for (int i = mData.size(); i < maxCount; i++) {
-                paddingEntries.add(new BarEntry(i, 0));
-            }
-        }
-
-        BarData barData = new BarData(setBar(barEntries, NORMAL_LINE), setBar(paddingEntries, INVISIABLE_LINE));
-        barData.setBarWidth(0.75f);
-        CombinedData combinedData = new CombinedData();
-        combinedData.setData(barData);
-        LineData lineData = new LineData(setLine(DIF, difEntries), setLine(DEA, deaEntries));
-        combinedData.setData(lineData);
-        mChartMacd.setData(combinedData);
-
-        mChartMacd.setVisibleXRange(MAX_COUNT, MIN_COUNT);
-
-        mChartMacd.notifyDataSetChanged();
-//        mChartMacd.moveViewToX(combinedData.getEntryCount());
-        moveToLast(mChartMacd);
-    }
-
-    private void initChartKdjData() {
-        ArrayList<Entry> kEntries = new ArrayList<>(INIT_COUNT);
-        ArrayList<Entry> dEntries = new ArrayList<>(INIT_COUNT);
-        ArrayList<Entry> jEntries = new ArrayList<>(INIT_COUNT);
-        ArrayList<Entry> paddingEntries = new ArrayList<>(INIT_COUNT);
-
-        for (int i = 0; i < mData.size(); i++) {
-            kEntries.add(new Entry(i, (float) mData.get(i).getK()));
-            dEntries.add(new Entry(i, (float) mData.get(i).getD()));
-            jEntries.add(new Entry(i, (float) mData.get(i).getJ()));
-        }
-        if (!mData.isEmpty() && mData.size() < MAX_COUNT) {
-            for (int i = mData.size(); i < MAX_COUNT; i++) {
-                paddingEntries.add(new Entry(i, (float) mData.get(mData.size() - 1).getK()));
-            }
-        }
-        ArrayList<ILineDataSet> sets = new ArrayList<>();
-        sets.add(setLine(K, kEntries));
-        sets.add(setLine(D, dEntries));
-        sets.add(setLine(J, jEntries));
-        sets.add(setLine(INVISIABLE_LINE, paddingEntries));
-        LineData lineData = new LineData(sets);
-
-        CombinedData combinedData = new CombinedData();
-        combinedData.setData(lineData);
-        mChartKdj.setData(combinedData);
-
-        mChartMacd.setVisibleXRange(MAX_COUNT, MIN_COUNT);
-
-        mChartKdj.notifyDataSetChanged();
-        moveToLast(mChartKdj);
     }
 
 
@@ -544,13 +424,6 @@ public class KLineView extends BaseView implements CoupleChartGestureListener.On
         CandleData kData = combinedData.getCandleData();
         ICandleDataSet klineSet = kData.getDataSetByIndex(0);
         IBarDataSet volSet = mChartVolume.getData().getBarData().getDataSetByIndex(0);
-        IBarDataSet macdSet = mChartMacd.getData().getBarData().getDataSetByIndex(0);
-        ILineDataSet difSet = mChartMacd.getData().getLineData().getDataSetByIndex(0);
-        ILineDataSet deaSet = mChartMacd.getData().getLineData().getDataSetByIndex(1);
-        LineData kdjData = mChartKdj.getData().getLineData();
-        ILineDataSet kSet = kdjData.getDataSetByIndex(0);
-        ILineDataSet dSet = kdjData.getDataSetByIndex(1);
-        ILineDataSet jSet = kdjData.getDataSetByIndex(2);
 
         if (mData.contains(hisData)) {
             int index = mData.indexOf(hisData);
@@ -562,12 +435,7 @@ public class KLineView extends BaseView implements CoupleChartGestureListener.On
             ma20Set.removeLast();
             ma30Set.removeLast();
             volSet.removeEntry(index);
-            macdSet.removeEntry(index);
-            difSet.removeEntry(index);
-            deaSet.removeEntry(index);
-            kSet.removeEntry(index);
-            dSet.removeEntry(index);
-            jSet.removeEntry(index);
+
             mData.remove(index);
         }
         mData.add(hisData);
@@ -575,14 +443,6 @@ public class KLineView extends BaseView implements CoupleChartGestureListener.On
         int klineCount = klineSet.getEntryCount();
         klineSet.addEntry(new CandleEntry(klineCount, (float) hisData.getHigh(), (float) hisData.getLow(), (float) hisData.getOpen(), (float) hisData.getClose()));
         volSet.addEntry(new BarEntry(volSet.getEntryCount(), hisData.getVol(), hisData));
-
-        macdSet.addEntry(new BarEntry(macdSet.getEntryCount(), (float) hisData.getMacd()));
-        difSet.addEntry(new Entry(difSet.getEntryCount(), (float) hisData.getDif()));
-        deaSet.addEntry(new Entry(deaSet.getEntryCount(), (float) hisData.getDea()));
-
-        kSet.addEntry(new Entry(kSet.getEntryCount(), (float) hisData.getK()));
-        dSet.addEntry(new Entry(dSet.getEntryCount(), (float) hisData.getD()));
-        jSet.addEntry(new Entry(jSet.getEntryCount(), (float) hisData.getJ()));
 
         // 因为ma的数量会少，所以这里用kline的set数量作为x
         if (!Double.isNaN(hisData.getMa5())) {
@@ -601,33 +461,22 @@ public class KLineView extends BaseView implements CoupleChartGestureListener.On
 
         mChartPrice.getXAxis().setAxisMaximum(combinedData.getXMax() + 1.5f);
         mChartVolume.getXAxis().setAxisMaximum(mChartVolume.getData().getXMax() + 1.5f);
-        mChartMacd.getXAxis().setAxisMaximum(mChartMacd.getData().getXMax() + 1.5f);
-        mChartKdj.getXAxis().setAxisMaximum(mChartKdj.getData().getXMax() + 1.5f);
 
 
         mChartPrice.setVisibleXRange(MAX_COUNT, MIN_COUNT);
         mChartVolume.setVisibleXRange(MAX_COUNT, MIN_COUNT);
-        mChartMacd.setVisibleXRange(MAX_COUNT, MIN_COUNT);
-        mChartKdj.setVisibleXRange(MAX_COUNT, MIN_COUNT);
+
 
         mChartPrice.notifyDataSetChanged();
         mChartPrice.invalidate();
         mChartVolume.notifyDataSetChanged();
         mChartVolume.invalidate();
-        mChartMacd.notifyDataSetChanged();
-        mChartMacd.invalidate();
-        mChartKdj.notifyDataSetChanged();
-        mChartKdj.invalidate();
+
 
 
         setDescription(mChartPrice, String.format(Locale.getDefault(), "MA5:%.2f  MA10:%.2f  MA20:%.2f  MA30:%.2f",
                 hisData.getMa5(), hisData.getMa10(), hisData.getMa20(), hisData.getMa30()));
         setDescription(mChartVolume, "成交量 " + hisData.getVol());
-        setDescription(mChartMacd, String.format(Locale.getDefault(), "MACD:%.2f  DEA:%.2f  DIF:%.2f",
-                hisData.getMacd(), hisData.getDea(), hisData.getDif()));
-        setDescription(mChartKdj, String.format(Locale.getDefault(), "K:%.2f  D:%.2f  J:%.2f",
-                hisData.getK(), hisData.getD(), hisData.getJ()));
-
     }
 
 
@@ -639,8 +488,6 @@ public class KLineView extends BaseView implements CoupleChartGestureListener.On
         mChartPrice.setViewPortOffsets(0, 0, 0, chartHeight);
         int bottom = DisplayUtils.dip2px(mContext, 20);
         mChartVolume.setViewPortOffsets(0, 0, 0, bottom);
-        mChartMacd.setViewPortOffsets(0, 0, 0, bottom);
-        mChartKdj.setViewPortOffsets(0, 0, 0, bottom);
     }
 
 
@@ -658,18 +505,9 @@ public class KLineView extends BaseView implements CoupleChartGestureListener.On
         setLimitLine(mLastClose);
     }
 
-    public void setLastClose(double lastClose) {
-        mLastClose = lastClose;
-        mChartPrice.setOnChartValueSelectedListener(new InfoViewListener(mContext, mLastClose, mData, mChartInfoView, mChartVolume, mChartMacd, mChartKdj));
-        mChartVolume.setOnChartValueSelectedListener(new InfoViewListener(mContext, mLastClose, mData, mChartInfoView, mChartPrice, mChartMacd, mChartKdj));
-        mChartMacd.setOnChartValueSelectedListener(new InfoViewListener(mContext, mLastClose, mData, mChartInfoView, mChartPrice, mChartVolume, mChartKdj));
-        mChartKdj.setOnChartValueSelectedListener(new InfoViewListener(mContext, mLastClose, mData, mChartInfoView, mChartPrice, mChartVolume, mChartMacd));
-
-    }
-
-
     @Override
     public void onAxisChange(BarLineChartBase chart) {
+        LogT.w("轴线改变位置:chart=xHigh:"+chart.getHighestVisibleX()+",xLow:"+chart.getLowestVisibleX());
         float lowestVisibleX = chart.getLowestVisibleX();
         if (lowestVisibleX <= chart.getXAxis().getAxisMinimum()) return;
         int maxX = (int) chart.getHighestVisibleX();
@@ -678,10 +516,5 @@ public class KLineView extends BaseView implements CoupleChartGestureListener.On
         setDescription(mChartPrice, String.format(Locale.getDefault(), "MA5:%.2f  MA10:%.2f  MA20:%.2f  MA30:%.2f",
                 hisData.getMa5(), hisData.getMa10(), hisData.getMa20(), hisData.getMa30()));
         setDescription(mChartVolume, "成交量 " + hisData.getVol());
-        setDescription(mChartMacd, String.format(Locale.getDefault(), "MACD:%.2f  DEA:%.2f  DIF:%.2f",
-                hisData.getMacd(), hisData.getDea(), hisData.getDif()));
-        setDescription(mChartKdj, String.format(Locale.getDefault(), "K:%.2f  D:%.2f  J:%.2f",
-                hisData.getK(), hisData.getD(), hisData.getJ()));
-
     }
 }

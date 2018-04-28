@@ -19,7 +19,8 @@ public abstract class ChartInfoView extends LinearLayout {
     protected Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
-            setVisibility(GONE);
+            // TODO: 2018/4/28 修改是否延时隐藏 
+//            setVisibility(GONE);
             if (mLineCharts != null) {
                 for (Chart chart : mLineCharts) {
                     chart.highlightValue(null);

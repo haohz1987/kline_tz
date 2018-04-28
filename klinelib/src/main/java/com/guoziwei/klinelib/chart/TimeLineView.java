@@ -1,5 +1,6 @@
 package com.guoziwei.klinelib.chart;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -115,18 +116,20 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
         mChartPrice.setXMarker(mvx);
         Legend lineChartLegend = mChartPrice.getLegend();
         lineChartLegend.setEnabled(false);
-
+        //轴价格
         XAxis xAxisPrice = mChartPrice.getXAxis();
         xAxisPrice.setDrawLabels(false);
         xAxisPrice.setDrawAxisLine(false);
-        xAxisPrice.setDrawGridLines(false);
+        xAxisPrice.setDrawGridLines(true);
         xAxisPrice.setAxisMinimum(-0.5f);
 
-
+        //Y轴左
         YAxis axisLeftPrice = mChartPrice.getAxisLeft();
+        //设置价格提示的数量
         axisLeftPrice.setLabelCount(5, true);
         axisLeftPrice.setDrawLabels(true);
-        axisLeftPrice.setDrawGridLines(false);
+
+        axisLeftPrice.setDrawGridLines(true);
 
         axisLeftPrice.setDrawAxisLine(false);
         axisLeftPrice.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
@@ -146,12 +149,12 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
         leftColorContentYAxisRenderer.setUseDefaultLabelXOffset(false);
         mChartPrice.setRendererLeftYAxis(leftColorContentYAxisRenderer);
 
-
+        //Y轴右
         YAxis axisRightPrice = mChartPrice.getAxisRight();
-        axisRightPrice.setLabelCount(5, true);
+        axisRightPrice.setLabelCount(3, true);
         axisRightPrice.setDrawLabels(true);
 
-        axisRightPrice.setDrawGridLines(false);
+        axisRightPrice.setDrawGridLines(true);
         axisRightPrice.setDrawAxisLine(false);
         axisRightPrice.setTextColor(mAxisColor);
         axisRightPrice.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
@@ -183,9 +186,11 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
     }
 
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initChartListener() {
         mChartPrice.setOnChartGestureListener(new CoupleChartGestureListener(this, mChartPrice, mChartVolume));
         mChartVolume.setOnChartGestureListener(new CoupleChartGestureListener(this, mChartVolume, mChartPrice));
+        //监听K线和成交量的数值
         mChartPrice.setOnChartValueSelectedListener(new InfoViewListener(mContext, mLastClose, mData, mChartInfoView, mChartVolume));
         mChartVolume.setOnChartValueSelectedListener(new InfoViewListener(mContext, mLastClose, mData, mChartInfoView, mChartPrice));
 

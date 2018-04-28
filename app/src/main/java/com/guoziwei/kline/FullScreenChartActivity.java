@@ -22,8 +22,6 @@ public class FullScreenChartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_fullscreen_chart);
         TabLayout tabLayout = findViewById(R.id.tab);
         final ViewPager viewPager = findViewById(R.id.view_pager);
-        KLineChartFragment dayKFragment = KLineChartFragment.newInstance(1);
-        KLineChartFragment weekKFragment = KLineChartFragment.newInstance(7);
         Fragment[] fragments = {TimeLineChartFragment.newInstance(1),
                 KLineChartFragment.newInstance(1), KLineChartFragment.newInstance(7),
                 KLineChartFragment.newInstance(30), KLineChartFragment.newInstance(90), KLineChartFragment.newInstance(365),};

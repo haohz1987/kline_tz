@@ -8,7 +8,8 @@
 
     <color name="marker_color">#be945c</color>
     <color name="marker_text_color">#333333</color>
-    <color name="chart_grid_color">#333333</color>
+    <!--grid网格线的颜色-->
+    <color name="chart_grid_color">#999999</color>
 
     <color name="ma5">#823E66</color>
     <color name="ma10">#B99C7A</color>
@@ -24,8 +25,8 @@
 
     <color name="increasing_color">@color/main_color_red</color>
     <color name="decreasing_color">@color/main_color_green</color>
-    <color name="normal_line_color">#be945c</color>
-    <color name="ave_color">#666</color>
+    <color name="normal_line_color">#2896FF</color>
+    <color name="ave_color">#FFD8A5</color>
     <color name="axis_color">#333</color>
     <color name="chart_info_color">#88000000</color>
     <color name="chart_no_data_color">#be945c</color>

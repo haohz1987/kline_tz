@@ -1,37 +1,19 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
-    <com.guoziwei.klinelib.chart.AppCombinedChart
-        android:id="@+id/vol_chart"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/bottom_chart_height"
-        android:layout_gravity="bottom" />
-
-
-    <com.guoziwei.klinelib.chart.AppCombinedChart
-        android:id="@+id/macd_chart"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/bottom_chart_height"
-        android:layout_gravity="bottom" />
-
-    <com.guoziwei.klinelib.chart.AppCombinedChart
-        android:id="@+id/kdj_chart"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/bottom_chart_height"
-        android:layout_gravity="bottom" />
-
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_marginTop="2dp"
+        android:layout_weight="1"
+        >
 
         <com.guoziwei.klinelib.chart.AppCombinedChart
             android:id="@+id/price_chart"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
+            android:layout_height="600dp" />
 
         <com.guoziwei.klinelib.chart.KLineChartInfoView
             android:id="@+id/k_info"
@@ -39,5 +21,9 @@
             android:layout_height="wrap_content"
             android:visibility="gone" />
     </FrameLayout>
-
-</FrameLayout>
+    <com.guoziwei.klinelib.chart.AppCombinedChart
+        android:id="@+id/vol_chart"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_chart_height"
+        />
+</LinearLayout>

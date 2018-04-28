@@ -55,7 +55,7 @@ public abstract class AxisBase extends ComponentBase {
     /**
      * the number of label entries the axis should have, default 6
      */
-    private int mLabelCount = 6;
+    private int mLabelCount = 3;
 
     /**
      * the minimum interval between axis values

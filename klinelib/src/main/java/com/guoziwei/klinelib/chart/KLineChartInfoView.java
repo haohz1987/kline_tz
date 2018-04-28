@@ -74,6 +74,8 @@ public class KLineChartInfoView extends ChartInfoView {
         mTvVol.setText(DataUtils.fmtMicrometer(data.getVol() + ""));
         removeCallbacks(mRunnable);
         postDelayed(mRunnable, 2000);
+        // TODO: 2018/4/28 修改是否延时隐藏
+//        post(mRunnable);
     }
 
 }

@@ -34,7 +34,6 @@ class BaseView extends LinearLayout {
     protected int mAxisColor;
     protected int mTransparentColor;
 
-
     public int MAX_COUNT = 150;
     public int MIN_COUNT = 10;
     public int INIT_COUNT = 80;
@@ -61,22 +60,27 @@ class BaseView extends LinearLayout {
         chart.setScaleEnabled(true);
         chart.setDrawBorders(false);
         chart.setBorderWidth(1);
+        //可以拖拽
         chart.setDragEnabled(true);
+        //Y方向按比例缩减
         chart.setScaleYEnabled(false);
+        //设置自动缩小放大
         chart.setAutoScaleMinMaxEnabled(true);
+        //移动减速
         chart.setDragDecelerationEnabled(false);
+        //设置选中高亮
         chart.setHighlightPerDragEnabled(false);
         Legend lineChartLegend = chart.getLegend();
         lineChartLegend.setEnabled(false);
-
 
         XAxis xAxisVolume = chart.getXAxis();
         xAxisVolume.setDrawLabels(true);
         xAxisVolume.setDrawAxisLine(false);
         xAxisVolume.setDrawGridLines(false);
         xAxisVolume.setTextColor(mAxisColor);
+        //设置时间提示的位置/数量
         xAxisVolume.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxisVolume.setLabelCount(3, true);
+        xAxisVolume.setLabelCount(5, true);
         xAxisVolume.setAvoidFirstLastClipping(true);
         xAxisVolume.setAxisMinimum(-0.5f);
 
@@ -99,37 +103,26 @@ class BaseView extends LinearLayout {
         YAxis axisLeftVolume = chart.getAxisLeft();
         axisLeftVolume.setDrawLabels(true);
         axisLeftVolume.setDrawGridLines(false);
+        //成交量提示的数量
         axisLeftVolume.setLabelCount(3, true);
         axisLeftVolume.setDrawAxisLine(false);
         axisLeftVolume.setTextColor(mAxisColor);
-        axisLeftVolume.setSpaceTop(10);
+
+        axisLeftVolume.setSpaceTop(15);
         axisLeftVolume.setSpaceBottom(0);
-        axisLeftVolume.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
-        /*axisLeftVolume.setValueFormatter(new IAxisValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-                String s;
-                if (value > 10000) {
-                    s = (int) (value / 10000) + "w";
-                } else if (value > 1000) {
-                    s = (int) (value / 1000) + "k";
-                } else {
-                    s = (int) value + "";
-                }
-                return String.format(Locale.getDefault(), "%1$5s", s);
-            }
-        });
-*/
+        axisLeftVolume.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);//左侧成交量提示
+
         Transformer leftYTransformer = chart.getRendererLeftYAxis().getTransformer();
         ColorContentYAxisRenderer leftColorContentYAxisRenderer = new ColorContentYAxisRenderer(chart.getViewPortHandler(), chart.getAxisLeft(), leftYTransformer);
         leftColorContentYAxisRenderer.setLabelInContent(true);
         leftColorContentYAxisRenderer.setUseDefaultLabelXOffset(false);
         chart.setRendererLeftYAxis(leftColorContentYAxisRenderer);
-
         //右边y
         YAxis axisRightVolume = chart.getAxisRight();
         axisRightVolume.setDrawLabels(false);
-        axisRightVolume.setDrawGridLines(false);
+        axisRightVolume.setLabelCount(3,true);
+        //成交量网格线
+        axisRightVolume.setDrawGridLines(true);
         axisRightVolume.setDrawAxisLine(false);
 
     }

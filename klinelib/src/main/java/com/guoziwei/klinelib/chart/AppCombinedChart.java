@@ -12,6 +12,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IDataSet;
 import com.github.mikephil.charting.utils.MPPointF;
+import com.guoziwei.klinelib.LogT;
 
 /**
  * K线/成交量图像显示容器
@@ -20,7 +21,7 @@ import com.github.mikephil.charting.utils.MPPointF;
 public class AppCombinedChart extends CombinedChart {
 
     private IMarker mXMarker;
-
+    public static boolean CHART_DEBUG = true;
     private float mYCenter;
 
     public AppCombinedChart(Context context) {
@@ -49,7 +50,7 @@ public class AppCombinedChart extends CombinedChart {
     public void setData(CombinedData data) {
         try {
             super.setData(data);
-        }catch (ClassCastException e) {
+        } catch (ClassCastException e) {
             // ignore
         }
         ((AppCombinedChartRenderer) mRenderer).createRenderers();
@@ -85,16 +86,16 @@ public class AppCombinedChart extends CombinedChart {
             mXMarker.refreshContent(e, highlight);
 
             // draw the marker
-//            if (mMarker instanceof LineChartYMarkerView) {
+            //            if (mMarker instanceof LineChartYMarkerView) {
             LineChartYMarkerView yMarker = (LineChartYMarkerView) mMarker;
             LineChartXMarkerView xMarker = (LineChartXMarkerView) mXMarker;
             int width = yMarker.getMeasuredWidth();
             mMarker.draw(canvas, getMeasuredWidth() - width * 1.05f, pos[1] - yMarker.getMeasuredHeight() / 2);
 
             mXMarker.draw(canvas, pos[0] - (xMarker.getMeasuredWidth() / 2), getMeasuredHeight());
-//            } else {
-//                mMarker.draw(canvas, pos[0], pos[1]);
-//            }
+            //            } else {
+            //                mMarker.draw(canvas, pos[0], pos[1]);
+            //            }
         }
     }
 
@@ -134,6 +135,8 @@ public class AppCombinedChart extends CombinedChart {
 
         final float fromX = getLowestVisibleX();
         final float toX = getHighestVisibleX();
+        if(CHART_DEBUG)
+            LogT.w("fromX="+fromX+",toX="+toX);
 
         mData.calcMinMaxY(fromX, toX);
 
